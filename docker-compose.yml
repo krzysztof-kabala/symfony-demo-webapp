@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+  redis:
+    image: redis:4-alpine
+    container_name: redis.symfony-demo-webapp.test
+    command: 'redis-server --save "" --appendonly no'
+    stdin_open: true
+    tty: true
+    networks:
+      - global
+    restart: always
+
+  mysql:
+    image: mariadb:10
+    container_name: mysql.symfony-demo-webapp.test
+    stdin_open: true
+    tty: true
+    networks:
+      - global
+    env_file:
+       - ./docker/mysql/config.env
+    volumes:
+       - ~/data/mysql.symfony-demo-webapp.test:/var/lib/mysql
+    restart: always
+
+  webapp:
+    image: amsdard.io/krzysztof.kabala/symfony-demo-webapp:1.0
+    container_name: webapp.symfony-demo-webapp.test
+    build:
+        context: ./
+        dockerfile: ./docker/webapp/Dockerfile
+    networks:
+      - global
+    stdin_open: true
+    tty: true
+    env_file:
+       - ./.env
+    labels:
+       traefik.frontend.rule: "Host:{subdomain}.symfony-demo-webapp.test,symfony-demo-webapp.test"
+    volumes:
+       - ./:/opt:cached
+       - ./docker/webapp:/etc/apache2/sites-enabled
+       - ~/.ssh:/var/www/.ssh:cached
+       - ~/.docker-composer:/var/www/.composer:cached
+    links:
+       - mysql
+       - redis
+    restart: always
+
+networks:
+  global:
+    external: true

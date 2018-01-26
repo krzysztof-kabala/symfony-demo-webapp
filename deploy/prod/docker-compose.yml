@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  redis:
+    image: redis:4-alpine
+    container_name: redis.symfony-demo-webapp.prod
+    stdin_open: true
+    tty: true
+    networks:
+      - global
+    restart: always
+
+  mysql:
+    image: mariadb:10
+    container_name: mysql.symfony-demo-webapp.prod
+    stdin_open: true
+    tty: true
+    networks:
+      - global
+    env_file:
+       - ./docker/mysql/config.env
+    volumes:
+       - ~/data/mysql.symfony-demo-webapp.prod:/var/lib/mysql
+    restart: always
+
+  webapp:
+    image: amsdard.io/krzysztof.kabala/symfony-demo-webapp:1.0
+    container_name: webapp.symfony-demo-webapp.prod
+    networks:
+      - global
+    stdin_open: true
+    tty: true
+    labels:
+       traefik.frontend.rule: "Host:{subdomain}.symfony-demo-webapp.prod,symfony-demo-webapp.prod"
+    env_file:
+       - ./docker/webapp/config.env
+    links:
+       - mysql
+       - redis
+    restart: always
+
+networks:
+  global:
+    external: true
