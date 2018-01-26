@@ -2,7 +2,7 @@ symfony-demo-webapp
 ========================
 * [local] symfony-demo-webapp.test
 * [dev] symfony-demo-webapp.app.amsdard.io
-* [live] 
+* [live] symfony-demo-webapp.prod
 
 Requirements
 ---
@@ -19,6 +19,11 @@ yake install
 ```
 * run `yake encore dev --watch` (or `npm run watch`) in background to work with assets
 * make sure `symfony-demo-webapp.test` domain is routed to Your localhost
+
+add some data
+```
+yake console app:add-data ...
+```
 
 
 Additional info

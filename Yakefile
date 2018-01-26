@@ -36,9 +36,11 @@ deploy:
 install:
   - $BIN composer install
   - $BIN yarn install
+  - $BIN populate
 
 # Seeds database with sample user and site - for one time use per deployment.
 populate:
+   - $BIN console -v doctrine:schema:update --force
 
 # Fresh installation process - to be run one time
 configure:
