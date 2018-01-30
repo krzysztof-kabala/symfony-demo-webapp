@@ -3,7 +3,7 @@ version: '3'
 services:
   redis:
     image: redis:4-alpine
-    container_name: redis.symfony-demo-webapp.prod
+    container_name: prod.redis.symfony-demo-webapp.docker
     command: 'redis-server --save "" --appendonly no'
     stdin_open: true
     tty: true
@@ -13,7 +13,7 @@ services:
 
   mysql:
     image: mariadb:10
-    container_name: mysql.symfony-demo-webapp.prod
+    container_name: prod.mysql.symfony-demo-webapp.docker
     stdin_open: true
     tty: true
     networks:
@@ -21,12 +21,12 @@ services:
     env_file:
        - ./docker/mysql/config.env
     volumes:
-       - ~/data/mysql.symfony-demo-webapp.prod:/var/lib/mysql
+       - ~/data/prod.mysql.symfony-demo-webapp.docker:/var/lib/mysql
     restart: always
 
   webapp:
     image: amsdard.io/krzysztof.kabala/symfony-demo-webapp:1.0
-    container_name: webapp.symfony-demo-webapp.prod
+    container_name: prod.webapp.symfony-demo-webapp.docker
     networks:
       - global
     stdin_open: true

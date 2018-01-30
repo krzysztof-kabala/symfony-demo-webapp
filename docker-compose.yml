@@ -3,7 +3,7 @@ version: '3'
 services:
   redis:
     image: redis:4-alpine
-    container_name: redis.symfony-demo-webapp.test
+    container_name: redis.symfony-demo-webapp.docker
     command: 'redis-server --save "" --appendonly no'
     stdin_open: true
     tty: true
@@ -13,7 +13,7 @@ services:
 
   mysql:
     image: mariadb:10
-    container_name: mysql.symfony-demo-webapp.test
+    container_name: mysql.symfony-demo-webapp.docker
     stdin_open: true
     tty: true
     networks:
@@ -26,7 +26,7 @@ services:
 
   webapp:
     image: amsdard.io/krzysztof.kabala/symfony-demo-webapp:1.0
-    container_name: webapp.symfony-demo-webapp.test
+    container_name: webapp.symfony-demo-webapp.docker
     build:
         context: ./
         dockerfile: ./docker/webapp/Dockerfile
